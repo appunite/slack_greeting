@@ -25,18 +25,16 @@ defmodule MyApp.Application do
     import Supervisor.Spec, warn: false
 
     Supervisor.start_link([
-      SlackGreeting.task(
+      {SlackGreeting,
         hook_url: "YOUR_SLACK_HOOK",
         application: :my_app,
-        channel_name: "channel-name"
-      )
+        channel_name: "channel-name"}
     ], strategy: :one_for_one, name: MyApp.Supervisor)
   end
 end
 ```
 
-Optionally, you can pass an anonymous function as a `toggle`. If that function
-returns a value that is not true, a notification won't be sent:
+Optionally, you can pass `enabled` flag that will not send message unless `true`:
 
 
 ```elixir
@@ -47,12 +45,11 @@ defmodule MyApp.Application do
     import Supervisor.Spec, warn: false
 
     Supervisor.start_link([
-      SlackGreeting.task(
+      {SlackGreeting,
         hook_url: "YOUR_SLACK_HOOK",
         application: :my_app,
         channel_name: "channel-name",
-        toggle: fn -> System.get_env("SEND_NOTIFICATION") == "true" end
-      )
+        enabled: System.get_env("SEND_NOTIFICATION") == "true"}
     ], strategy: :one_for_one, name: MyApp.Supervisor)
   end
 end
