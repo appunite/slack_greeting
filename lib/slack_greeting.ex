@@ -17,14 +17,15 @@ defmodule SlackGreeting do
     application = Keyword.get(opts, :application)
     version = fetch_version(opts)
     icon_emoji = opts[:icon_emoji] || ":white_check_mark:"
-    text = opts[:text] || "<!here> Hi, I am up with version *#{version}*!"
+    text = text(opts[:text], version)
 
     if enabled?.() do
       payload = "{
-      'icon_emoji': #{icon_emoji},
+      'icon_emoji': '#{icon_emoji}',
       'username': '#{to_string(application)} (#{Node.self()})',
-      'text':#{text},
+      'text': '#{text}',
       'channel': '##{channel_name}',
+      'link_names': '1'
       }"
 
       args = [
@@ -49,5 +50,13 @@ defmodule SlackGreeting do
     |> :application.get_key(:vsn)
     |> elem(1)
     |> List.to_string()
+  end
+
+  defp text(message, version) when is_binary(message) do
+    message <> " Version: *#{version}*"
+  end
+
+  defp text(_, version) do
+    "<!here> Hi, I am up with version *#{version}*!"
   end
 end

@@ -28,12 +28,16 @@ defmodule MyApp.Application do
       SlackGreeting.task(
         hook_url: "YOUR_SLACK_HOOK",
         application: :my_app,
-        channel_name: "channel-name"
+        channel_name: "channel-name",
+        text: "My custom greeting",
+        icon_emoji: "heart"
       )
     ], strategy: :one_for_one, name: MyApp.Supervisor)
   end
 end
 ```
+
+Where `text` and `icon_emoji` are optional.
 
 Optionally, you can pass an anonymous function as a `toggle`. If that function
 returns a value that is not true, a notification won't be sent:
