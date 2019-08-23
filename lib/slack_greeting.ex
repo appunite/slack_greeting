@@ -16,12 +16,14 @@ defmodule SlackGreeting do
     channel_name = Keyword.get(opts, :channel_name, "app-notification")
     application = Keyword.get(opts, :application)
     version = fetch_version(opts)
+    icon_emoji = opts[:icon_emoji] || ":white_check_mark:"
+    text = opts[:text] || "<!here> Hi, I am up with version *#{version}*!"
 
     if enabled?.() do
       payload = "{
-      'icon_emoji': ':white_check_mark:',
+      'icon_emoji': #{icon_emoji},
       'username': '#{to_string(application)} (#{Node.self()})',
-      'text': '<!here> Hi, I am up with version *#{version}*!',
+      'text':#{text},
       'channel': '##{channel_name}',
       }"
 
